@@ -129,18 +129,7 @@ def start_date (start_date):
     session.close()
     Temperature=list(np.ravel(Most_Actve_Station_Id))
     return jsonify(Temperature)  
-#within dates (start and end dates)   
-@app.route("/api/v1.0/<start_date>/<end_date>")
-def st_ed_date (start_date,end_date):
-    print(start_date)
-    print(end_date)
-    session = Session(engine)
-    Temp_range=session.query(func.min(Measurement.tobs),func.max(Measurement.tobs),func.avg(Measurement.tobs)).\
-    filter(Measurement.date>=start_date).\
-    filter(Measurement.date>=end_date).all()
-    session.close()
-    temp_rg=list(np.ravel(Temp_range))
-    return jsonify(temp_rg)
+
 # App run and debug  
 if __name__ =="__main__":
     app.run(debug=True)
