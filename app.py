@@ -49,16 +49,16 @@ def precipatation ():
         #create session link
     session = Session(engine)
     #date 
-    date=session.query(Measurement.date).\
-    order_by(Measurement.date.desc()).first().date
+    dMost_recent_date = session.query(Measurement.date).order_by(Measurement.date.desc()).first().date
     # Calculate the date one year from the last date in data set.
-    year_last=dt.datetime.strptime(date,'%Y-%m-%d')-dt.timedelta(days=365)
+    Year_Precipitation = (dt.date(2017,8,23) - dt.timedelta(days=365)).strftime('%Y-%m-%d')
+    Year_from_date = session.query(Measurement.date, Measurement.prcp).filter(Measurement.date >= Year_Precipitation).all()
     # Perform a query to retrieve the data and precipitation scores
-    prcp_score=session.query(Measurement.date,Measurement.prcp).\
-    filter(Measurement.date>=year_last).\
-    order_by(Measurement.date).all()
+    Year_Precipitation_df = pd.DataFrame(Year_from_date, columns=['date', 'precipitation'])
+    # Sort the dataframe by date
+    Year_Precipitation_df = Year_Precipitation_df.sort_values('date')
     session.close()
-    percp=list(np.ravel(prcp_score))
+    percp=list(np.ravel(Year_from_date))
     return jsonify(percp)
 
     # List of Stations
@@ -68,12 +68,12 @@ def stations ():
     session = Session(engine)
     
 # list of station ID and 
-    list_station=session.query(Station.station,Station.name).\
-    group_by(Station.name).\
-    order_by((Station.name).desc()).all()
+    Active_Stations = session.query(Measurement.station, func.count(Measurement.station)).\
+    group_by(Measurement.station).\
+    order_by(func.count(Measurement.station).desc()).all()
         
     session.close()
-    stat=list(np.ravel(list_station))
+    stat=list(np.ravel(Active_Stations))
     print("List of Station ID and name")
     return jsonify(stat)
 # temperature
