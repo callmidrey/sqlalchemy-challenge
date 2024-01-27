@@ -13,4 +13,4 @@ Two major visualizations were created and they are:
 ![Alt text](<Screenshot 2024-01-26 214936.png>)
 
 # Part 2: Design Your Climate App
-A Flask API based on the queries that was developed in Part 1 was designed.
+A Flask API based on the queries that was developed in Part 1 was designed. It may be needing a little more touch up but I did it to my best of knowledge and understanding.
